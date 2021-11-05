@@ -52,7 +52,7 @@ def read_package(workout_type: str, data: list) -> Training:
 
 def main(training: Training) -> None:
     """Главная функция."""
-    pass
+    def show_training_info()  # 05.11 Kir
 
 
 if __name__ == '__main__':
@@ -65,4 +65,4 @@ if __name__ == '__main__':
     for workout_type, data in packages:
         training = read_package(workout_type, data)
         main(training)
-
+        
