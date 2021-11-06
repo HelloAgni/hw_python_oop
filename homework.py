@@ -79,9 +79,10 @@ class Running(Training):
 
     def get_spent_calories(self) -> float:
         super().get_mean_speed()
+        training_time = self.duration * 60  # Проверка формулы через метод Tr.
         return ((self.coeff_calories_1 * Training.get_mean_speed(self)
                 - self.coeff_calories_2) * self.weight
-                / self.M_IN_KM * self.duration)
+                / self.M_IN_KM * training_time)
 
 
 class SportsWalking(Training):
@@ -129,9 +130,9 @@ class Swimming(Training):
                 * self.count_pool / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
-        distance: float = self.action * self.LEN_STEP / self.M_IN_KM
-        speed: float = distance / self.duration
-        return (speed + self.coeff_calories_1) * 2 * self.weight
+        distance: int = self.action * self.LEN_STEP / self.M_IN_KM
+        speed: int = distance / self.duration
+        return ((speed + self.coeff_calories_1) * 2 * self.weight)
 
 
 def read_package(workout_type: str, data: list) -> Training:
