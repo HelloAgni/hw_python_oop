@@ -28,8 +28,6 @@ class Training:
 
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65  # 1.38
-    coeff_calories_1 = 18
-    coeff_calories_2 = 20
 
     def __init__(self,
                  action: int,
@@ -59,9 +57,9 @@ class Training:
         """Вернуть информационное сообщение о выполненной тренировке."""
         return InfoMessage(type(self).__name__,
                            self.duration,
-                           self.get_distance(),  # ?
+                           self.get_distance(),
                            self.get_mean_speed(),
-                           self.get_spent_calories())  # ?
+                           self.get_spent_calories())
 
 
 class Running(Training):
@@ -89,8 +87,8 @@ class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65  # 1.38
-    coeff_calories_1 = 0.035
-    coeff_calories_2 = 0.029
+    coeff_calories_1: float = 0.035
+    coeff_calories_2: float = 0.029
 
     def __init__(self,
                  action: int,
@@ -138,12 +136,12 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    Dict_type = {'SWM': Swimming,  # return Dict[workout_type](*data)
+    dict_type = {'SWM': Swimming,
                  'RUN': Running,
                  'WLK': SportsWalking
                  }
-    if workout_type in Dict_type:
-        return Dict_type[workout_type](*data)
+    if workout_type in dict_type:
+        return dict_type[workout_type](*data)
 
 
 def main(training: Training) -> None:
