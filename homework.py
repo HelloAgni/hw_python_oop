@@ -57,7 +57,6 @@ class Training:
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        pass  # ??
         return InfoMessage(type(self).__name__,
                            self.duration,
                            self.get_distance(),  # ?
@@ -69,8 +68,8 @@ class Running(Training):
     """Тренировка: бег."""
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65  # 1.38
-    coeff_calories_1: float = 18
-    coeff_calories_2: float = 20
+    coeff_calories_1 = 18
+    coeff_calories_2 = 20
 
     def __init__(self,
                  action: int,
@@ -78,19 +77,19 @@ class Running(Training):
                  weight: float) -> None:
         super().__init__(action, duration, weight)
 
-    def get_spent_calories(self):
-        distance = self.action * self.LEN_STEP / self.M_IN_KM
-        speed = distance / self.duration
-        calories_1 = self.coeff_calories_1 * speed - self.coeff_calories_2
-        return calories_1 * self.weight / self.M_IN_KM * self.duration  # try
+    def get_spent_calories(self) -> float:
+        super().get_mean_speed()
+        return ((self.coeff_calories_1 * Training.get_mean_speed(self)
+                - self.coeff_calories_2) * self.weight
+                / self.M_IN_KM * self.duration)
 
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65  # 1.38
-    coeff_calories_1: float = 0.035
-    coeff_calories_2: float = 0.029
+    coeff_calories_1 = 0.035
+    coeff_calories_2 = 0.029
 
     def __init__(self,
                  action: int,
@@ -101,11 +100,12 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        distance: float = self.action * self.LEN_STEP / self.M_IN_KM
-        speed: float = distance / self.duration
+        distance = self.action * self.LEN_STEP / self.M_IN_KM
+        speed = distance / self.duration
+        training_time = self.duration * 60
         return ((self.coeff_calories_1 * self.weight
-                + (speed ** 2 // self.height)
-                * self.coeff_calories_2 * self.weight) * self.duration)
+                + (speed ** 2 // self.height) * self.coeff_calories_2
+                * self.weight) * training_time)
 
 
 class Swimming(Training):
@@ -113,7 +113,6 @@ class Swimming(Training):
     M_IN_KM: int = 1000
     LEN_STEP: float = 1.38  # 0.65
     coeff_calories_1: float = 1.1
-    
 
     def __init__(self,
                  action: int,
@@ -124,30 +123,30 @@ class Swimming(Training):
         super().__init__(action, duration, weight)
         self.length_pool = length_pool
         self.count_pool = count_pool
-        distance: float = self.action * self.LEN_STEP / self.M_IN_KM
-        self.speed: float = distance / self.duration
 
     def get_mean_speed(self) -> float:
         return (self.length_pool
                 * self.count_pool / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
-        return (self.speed + self.coeff_calories_1) * 2 * self.weight
+        distance: float = self.action * self.LEN_STEP / self.M_IN_KM
+        speed: float = distance / self.duration
+        return (speed + self.coeff_calories_1) * 2 * self.weight
 
 
 def read_package(workout_type: str, data: list) -> Training:
     """Прочитать данные полученные от датчиков."""
-    Dict_type = {'SWM': 'Swimming',  # return dict_of[workout_type](*data)
-                 'RUN': 'Running',
-                 'WLK': 'Walking'
+    Dict_type = {'SWM': Swimming,  # return Dict[workout_type](*data)
+                 'RUN': Running,
+                 'WLK': SportsWalking
                  }
-    if workout_type in Dict_type.keys():
-        pass
+    if workout_type in Dict_type:
+        return Dict_type[workout_type](*data)
 
 
 def main(training: Training) -> None:
     """Главная функция."""
-    info = Training.show_training_info()  # Объект класса InfoMessage
+    info = training.show_training_info()
     print(info.get_message())
 
 
