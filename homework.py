@@ -182,6 +182,8 @@ def read_package(workout_type: str, data: list) -> Training:
                  }
     if workout_type in dict_type:
         return dict_type[workout_type](*data)
+    else:
+        raise ValueError('Ошибка данных')
 
 
 def main(training: Training) -> None:
