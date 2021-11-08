@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
@@ -85,8 +86,8 @@ class Running(Training):
             / self.duration
         )
         training_time = (
-            self.duration *
-            self.MINUTES_IN_HOUR
+            self.duration
+            * self.MINUTES_IN_HOUR
         )
         return ((
                 self.coeff_calories_1
@@ -122,8 +123,8 @@ class SportsWalking(Training):
             / self.duration
         )
         training_time = (
-            self.duration *
-            self.MINUTES_IN_HOUR
+            self.duration
+            * self.MINUTES_IN_HOUR
         )
         return (
             (self.coeff_calories_1
@@ -171,7 +172,7 @@ class Swimming(Training):
             (speed
              + self.coeff_calories_1)
             * 2 * self.weight
-            )
+        )
 
 
 def read_package(workout_type: str, data: list) -> Training:
