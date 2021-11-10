@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 
 @dataclass
@@ -9,15 +9,21 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
+    TEXT_TYPE: str = 'Тип тренировки:'
+    TEXT_DURATION: str = 'Длительность:'
+    TEXT_DISTANCE: str = 'Дистанция:'
+    TEXT_SPEED: str = 'Ср. скорость:'
+    TEXT_CALORIES: str = 'Потрачено ккал:'
 
     def get_message(self):
         """Метод выводит возвращает строку сообщения."""
-
-        return(f'Тип тренировки: {self.training_type}; '
-               f'Длительность: {self.duration:.3f} ч.; '
-               f'Дистанция: {self.distance:.3f} км; '
-               f'Ср. скорость: {self.speed:.3f} км/ч; '
-               f'Потрачено ккал: {self.calories:.3f}.')
+        dict_InfoMessage = asdict(self)
+        message_text = ('{TEXT_TYPE} {training_type}; '
+                        '{TEXT_DURATION} {duration:.3f} ч.; '
+                        '{TEXT_DISTANCE} {distance:.3f} км; '
+                        '{TEXT_SPEED} {speed:.3f} км/ч; '
+                        '{TEXT_CALORIES} {calories:.3f}.')
+        return (message_text.format(**dict_InfoMessage))
 
 
 class Training:
