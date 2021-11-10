@@ -9,21 +9,22 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
-    TEXT_TYPE: str = 'Тип тренировки:'
-    TEXT_DURATION: str = 'Длительность:'
-    TEXT_DISTANCE: str = 'Дистанция:'
-    TEXT_SPEED: str = 'Ср. скорость:'
-    TEXT_CALORIES: str = 'Потрачено ккал:'
+    text_type: str = 'Тип тренировки:'
+    text_duration: str = 'Длительность:'
+    text_distance: str = 'Дистанция:'
+    text_speed: str = 'Ср. скорость:'
+    text_calories: str = 'Потрачено ккал:'
 
     def get_message(self):
         """Метод выводит возвращает строку сообщения."""
-        dict_InfoMessage = asdict(self)
-        message_text = ('{TEXT_TYPE} {training_type}; '
-                        '{TEXT_DURATION} {duration:.3f} ч.; '
-                        '{TEXT_DISTANCE} {distance:.3f} км; '
-                        '{TEXT_SPEED} {speed:.3f} км/ч; '
-                        '{TEXT_CALORIES} {calories:.3f}.')
-        return (message_text.format(**dict_InfoMessage))
+        dict_info = asdict(self)
+        message_text = ('{text_type} {training_type}; '
+                        '{text_duration} {duration:.3f} ч.; '
+                        '{text_distance} {distance:.3f} км; '
+                        '{text_speed} {speed:.3f} км/ч; '
+                        '{text_calories} {calories:.3f}.')
+        information = message_text.format(**dict_info)
+        return information
 
 
 class Training:
@@ -187,10 +188,9 @@ def read_package(workout_type: str, data: list) -> Training:
                  'RUN': Running,
                  'WLK': SportsWalking
                  }
-    if workout_type in dict_type:
-        return dict_type[workout_type](*data)
-    else:
+    if workout_type not in dict_type:
         raise ValueError('Ошибка данных')
+    return dict_type[workout_type](*data)
 
 
 def main(training: Training) -> None:
