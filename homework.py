@@ -9,20 +9,20 @@ class InfoMessage:
     distance: float
     speed: float
     calories: float
-    text_type: str = 'Тип тренировки:'
-    text_duration: str = 'Длительность:'
-    text_distance: str = 'Дистанция:'
-    text_speed: str = 'Ср. скорость:'
-    text_calories: str = 'Потрачено ккал:'
+    TEXT_TYPE: str = 'Тип тренировки:'
+    TEXT_DURATION: str = 'Длительность:'
+    TEXT_DISTANCE: str = 'Дистанция:'
+    TEXT_SPEED: str = 'Ср. скорость:'
+    TEXT_CALORIES: str = 'Потрачено ккал:'
 
     def get_message(self):
         """Метод выводит возвращает строку сообщения."""
         dict_info = asdict(self)
-        message_text = ('{text_type} {training_type}; '
-                        '{text_duration} {duration:.3f} ч.; '
-                        '{text_distance} {distance:.3f} км; '
-                        '{text_speed} {speed:.3f} км/ч; '
-                        '{text_calories} {calories:.3f}.')
+        message_text = ('{TEXT_TYPE} {training_type}; '
+                        '{TEXT_DURATION} {duration:.3f} ч.; '
+                        '{TEXT_DISTANCE} {distance:.3f} км; '
+                        '{TEXT_SPEED} {speed:.3f} км/ч; '
+                        '{TEXT_CALORIES} {calories:.3f}.')
         information = message_text.format(**dict_info)
         return information
 
@@ -79,8 +79,8 @@ class Training:
 
 class Running(Training):
     """Тренировка: бег."""
-    coeff_calories_1 = 18
-    coeff_calories_2 = 20
+    COEFF_CALORIES_1: int = 18
+    COEFF_CALORIES_2: int = 20
 
     def get_spent_calories(self) -> float:
         distance = (
@@ -88,18 +88,15 @@ class Running(Training):
             * self.LEN_STEP
             / self.M_IN_KM
         )
-        speed = (
-            distance
-            / self.duration
-        )
+        speed = distance / self.duration
         training_time = (
             self.duration
             * self.MINUTES_IN_HOUR
         )
         return ((
-                self.coeff_calories_1
+                self.COEFF_CALORIES_1
                 * speed
-                - self.coeff_calories_2)
+                - self.COEFF_CALORIES_2)
                 * self.weight
                 / self.M_IN_KM
                 * training_time
@@ -108,8 +105,8 @@ class Running(Training):
 
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
-    coeff_calories_1: float = 0.035
-    coeff_calories_2: float = 0.029
+    COEFF_CALORIES_1: float = 0.035
+    COEFF_CALORIES_2: float = 0.029
 
     def __init__(self,
                  action: int,
@@ -125,20 +122,17 @@ class SportsWalking(Training):
             * self.LEN_STEP
             / self.M_IN_KM
         )
-        speed = (
-            distance
-            / self.duration
-        )
+        speed = distance / self.duration
         training_time = (
             self.duration
             * self.MINUTES_IN_HOUR
         )
         return (
-            (self.coeff_calories_1
+            (self.COEFF_CALORIES_1
              * self.weight
              + (speed ** 2
                 // self.height)
-             * self.coeff_calories_2
+             * self.COEFF_CALORIES_2
              * self.weight)
             * training_time
         )
@@ -147,7 +141,7 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
     LEN_STEP: float = 1.38
-    coeff_calories_1: float = 1.1
+    COEFF_CALORIES_1: float = 1.1
 
     def __init__(self,
                  action: int,
@@ -177,7 +171,7 @@ class Swimming(Training):
         )
         return (
             (speed
-             + self.coeff_calories_1)
+             + self.COEFF_CALORIES_1)
             * 2 * self.weight
         )
 
